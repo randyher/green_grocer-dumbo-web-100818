@@ -22,26 +22,24 @@ end
 def apply_coupons(cart, coupons)
   output={}
 
-  cart.each do |item, info|
+  item_name="#{coupons[:item]} /WCOUPON"
+
+  cart[item_name]={
+    price: coupons[:cost],
+    clearance: "",
+    count: 1
+  }
+
+    cart.map do |item, info|
     coupons.each do |key,value|
       if (value==item)
-        output[item]=info
-        output[item][:count]-=coupons[:num]
-      else
-        output[item]=info
+        cart[item][:count]-=coupons[:num]
+        cart[item_name][:clearance]=cart[item][:clearance]
       end
     end
   end
 
-  item_name="#{coupons[:item]} /WCOUPON"
-
-  output[item_name]={
-    price: coupons[:cost],
-    clearance: true,
-    count: 1
-  }
-
-  output
+cart
 end
 
 def apply_clearance(cart)
